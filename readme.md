@@ -30,7 +30,7 @@ qwen2.5-coder-7b-instruct-q4_k_m.gguf
 Follow these steps to download the code, install dependencies, and boot the local engine on your machine:
 
 1. Clone the repository files:
-git clone https://github.com
+git clone https://github.com/ravanoth/mintaby-engine
 cd Mintaby-Engine
 
 2. Install the necessary system dependencies and node packages:
