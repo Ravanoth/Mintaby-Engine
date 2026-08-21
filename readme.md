@@ -1,6 +1,6 @@
 # Mintaby Engine
 
-Mintaby Engine is a local, open-source background AI service built specifically for the Phred development ecosystem. It runs entirely offline using node-llama-cpp to communicate with local hardware.
+Mintaby Engine is a local, open-source background AI service built specifically for the Phred development ecosystem. It runs entirely offline using node-llama-cpp to communicate directly with local hardware.
 
 The engine functions as an API service, listening for prompts on local port 3000 and streaming back structured, emoji-free markdown responses optimized for code generation.
 
@@ -11,22 +11,29 @@ The engine functions as an API service, listening for prompts on local port 3000
 - Output Style: Conversational, friendly, and direct. Strictly zero emojis, emoticons, or visual decorative symbols.
 - Target Specialization: Multilingual software engineering, data logic, and architectural design.
 
-## Prerequisites
+## Prerequisites & Model Download
 
-Before launching the engine, ensure your machine has:
-1. Node.js installed locally.
-2. The compiled model file saved directly in the project root directory under the filename: mintaby-brain.gguf
+Before launching the engine, you must download the exact raw model file specified below from Hugging Face and place it in your project folder.
 
-## Installation and Execution
+1. Model Download Link: Download this exact file version:
+https://huggingface.co
 
-1. Clone the repository files to your machine:
+2. Filename Reference: The exact file you must download is qwen2.5-coder-7b-instruct-q4_k_m.gguf (approximately 4.7 GB).
+
+3. Rename and Place: Rename that downloaded file to exactly `mintaby-brain.gguf` and move it into your `mintaby-engine` project root directory.
+
+## Startup Instructions
+
+Follow these steps to download the code, install dependencies, and boot the local engine on your machine:
+
+1. Clone the repository files:
 git clone https://github.com
 cd Mintaby-Engine
 
-2. Install the necessary system framework dependencies:
+2. Install the necessary system dependencies and node packages:
 npm install
 
-3. Boot the local background service:
+3. Start the background application engine:
 node index.js
 
 Once active, the terminal console will remain open and display:
