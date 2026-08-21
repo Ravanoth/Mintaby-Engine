@@ -1,36 +1,39 @@
 import { fileURLToPath } from "url";
 import path from "path";
-import { LlamaModel, LlamaContext, LlamaChatSession } from "node-llama-cpp";
+import { getLlama, LlamaChatSession } from "node-llama-cpp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Links to your renamed local model file
 const modelPath = path.join(__dirname, "mintaby-brain.gguf");
 
-console.log("Loading Mintaby AI local brain architecture...");
+async function runMintaby() {
+    console.log("Initializing local llama backend wrapper...");
+    
+    // 1. Properly boot the background C++ bindings first
+    const llama = await getLlama();
 
-const model = new LlamaModel({
-    modelPath: modelPath
-});
+    console.log("Loading Mintaby AI local brain architecture...");
+    
+    // 2. Pass the initialized backend to load your renamed file safely
+    const model = await llama.loadModel({
+        modelPath: modelPath
+    });
 
-const context = new LlamaContext({
-    model: model,
-    contextSize: 4096 // Gives it a healthy memory canvas for processing logic and files
-});
+    const context = await model.createContext({
+        contextSize: 4096 // Healthy memory canvas for handling programming files
+    });
 
-// Mintaby's core rules and strict styling parameters
-const systemPrompt = `Your name is Mintaby. You are an open-source, local AI assistant built directly into the Phred ecosystem. 
+    // 3. Set up your personalized Mintaby identity rules
+    const systemPrompt = `Your name is Mintaby. You are an open-source, local AI assistant built directly into the Phred ecosystem. 
 You specialize deeply in software engineering, logic, and multi-language code generation. 
 You are friendly, conversational, and witty. Talk like a helpful, knowledgeable peer.
 Strictly do not use any emojis, emoticons, or visual text symbols in your responses.`;
 
-const session = new LlamaChatSession({
-    contextSequence: context.getSequence(),
-    systemPrompt: systemPrompt
-});
+    const session = new LlamaChatSession({
+        contextSequence: context.getSequence(),
+        systemPrompt: systemPrompt
+    });
 
-// Test execution loop
-async function runTestConversation() {
+    // 4. Test run interaction loop
     const testPrompt = "Introduce yourself, state your ideal personality, and explain what your primary goal is.";
     
     console.log(`\nUser: ${testPrompt}\n`);
@@ -43,5 +46,5 @@ async function runTestConversation() {
     console.log(`\nMintaby:\n${reply}`);
 }
 
-runTestConversation();
-
+// Fire the initialization script loop
+runMintaby().catch(console.error);
