@@ -4,7 +4,6 @@ import http from "http";
 import { getLlama, LlamaChatSession } from "node-llama-cpp";
 
 // --- Global Console Filter ---
-// Intercepts and silences the node-llama-cpp control-type bug notification text
 const originalStderrWrite = process.stderr.write;
 process.stderr.write = function(chunk, encoding, callback) {
     const message = chunk.toString();
@@ -62,7 +61,6 @@ Adhere strictly to these identity layers:
             return;
         }
 
-        // Added a user-friendly browser landing route
         if (req.method === "GET" && req.url === "/") {
             res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
             res.end("<h1>Mintaby Service Engine is Online</h1><p>Send a POST request to <code>/api/chat</code> to communicate with the AI model.</p>");
