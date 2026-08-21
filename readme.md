@@ -13,14 +13,17 @@ The engine functions as an API service, listening for prompts on local port 3000
 
 ## Prerequisites & Model Download
 
-Before launching the engine, you must download the exact raw model file specified below from Hugging Face and place it in your project folder.
+Before launching the engine, you must download the exact raw model file from the Hugging Face files directory and place it in your project folder.
 
-1. Model Download Link: Download this exact file version:
+1. Model Directory Link: Go directly to the file list page on Hugging Face:
 https://huggingface.co
 
-2. Filename Reference: The exact file you must download is qwen2.5-coder-7b-instruct-q4_k_m.gguf (approximately 4.7 GB).
+2. Locate File: Scroll through the file list on that page and find this exact file name:
+qwen2.5-coder-7b-instruct-q4_k_m.gguf
 
-3. Rename and Place: Rename that downloaded file to exactly `mintaby-brain.gguf` and move it into your `mintaby-engine` project root directory.
+3. Download: Click the small download icon next to that file name to download it (approximately 4.7 GB).
+
+4. Rename and Place: Rename that downloaded file to exactly `mintaby-brain.gguf` and move it into your `mintaby-engine` project root directory.
 
 ## Startup Instructions
 
