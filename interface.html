@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>stonkAI</title>
+    <title>Mintaby</title>
     <link rel="icon" type="png/jpeg" href="favicon.png">
 <style>
 * {
@@ -13,17 +13,6 @@
 }
 
 :root {
-    --bg: #ffffff;
-    --text: #0d0d0d;
-    --panel-bg: #ffffff;
-    --bubble-user: #10a37f;
-    --bubble-assistant: #f7f7f8;
-    --border: #d1d5db;
-    --code-bg: #1e1e1e;
-    --code-text: #f8f8f2;
-}
-
-body.dark-mode {
     --bg: #0d0d0d;
     --text: #ffffff;
     --panel-bg: #1a1a1a;
@@ -38,32 +27,12 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
     background: var(--bg);
     color: var(--text);
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .container {
     display: flex;
     flex-direction: column;
     height: 100vh;
-}
-
-.header {
-    text-align: center;
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-}
-
-.header h1 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.header p {
-    color: var(--text);
-    opacity: 0.7;
-    font-size: 14px;
 }
 
 .chat-area {
@@ -103,7 +72,6 @@ body {
     border-radius: 12px;
     line-height: 1.5;
     font-size: 15px;
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .message.assistant .message-content {
@@ -140,7 +108,6 @@ body {
     font-family: inherit;
     resize: none;
     max-height: 100px;
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
 #messageInput:focus {
@@ -174,205 +141,14 @@ body {
     text-align: center;
     color: var(--text);
     opacity: 0.7;
-    padding: 40px 20px;
+    padding: 80px 20px 40px 20px;
 }
 
 .welcome-message h2 {
-    font-size: 24px;
+    font-size: 28px;
     margin-bottom: 12px;
     color: var(--text);
-}
-
-.floating-buttons {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    z-index: 9999;
-}
-
-.circle-btn {
-    width: 42px;
-    height: 42px;
-    background: var(--bubble-assistant);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s, border 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    position: relative;
-}
-
-.circle-btn:hover {
-    background: var(--border);
-}
-
-.circle-btn svg {
-    display: block;
-    transition: stroke 0.2s ease;
-}
-
-.circle-btn:hover svg {
-    stroke: #10a37f;
-}
-
-.circle-btn::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--panel-bg);
-    color: var(--text);
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.18s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-}
-
-.circle-btn:hover::after {
-    opacity: 1;
-}
-
-.settings-panel {
-    position: fixed;
-    top: 0;
-    right: -300px;
-    width: 300px;
-    height: 100vh;
-    background: var(--panel-bg);
-    border-left: 1px solid var(--border);
-    box-shadow: -2px 0 8px rgba(0,0,0,0.08);
-    padding: 60px 20px 20px 20px;
-    transition: right 0.3s ease, background 0.3s ease;
-    z-index: 999999999;
-}
-
-.settings-panel.open {
-    right: 0;
-}
-
-.settings-panel h2,
-.settings-panel p {
-    color: var(--text);
-}
-
-.close-btn {
-    background: none;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    padding: 6px;
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    border-radius: 6px;
-    transition: background 0.2s, border 0.2s;
-}
-
-.close-btn:hover {
-    background: #f0f0f0;
-}
-
-.close-btn svg {
-    display: block;
-    transition: stroke 0.2s ease;
-}
-
-.close-btn:hover svg {
-    stroke: #10a37f;
-}
-    
-@keyframes twirl {
-    0% { transform: rotate(0deg); }
-    60% { transform: rotate(200deg); }
-    100% { transform: rotate(180deg); }
-}
-
-.circle-btn.twirl svg {
-    animation: twirl 0.45s ease;
-}
-
-.setting-item {
-    margin-top: 20px;
-}
-
-.toggle {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-}
-
-.toggle input {
-    display: none;
-}
-
-.slider {
-    width: 40px;
-    height: 20px;
-    background: var(--border);
-    border-radius: 20px;
-    position: relative;
-    transition: background 0.3s ease;
-}
-
-.slider::before {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background: var(--bg);
-    border-radius: 50%;
-    top: 2px;
-    left: 2px;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.toggle input:checked + .slider {
-    background: #10a37f;
-}
-
-.toggle input:checked + .slider::before {
-    transform: translateX(20px);
-}
-
-.label-text {
-    font-size: 14px;
-    color: var(--text);
-}
-
-body.dark-mode .circle-btn svg {
-    stroke: #ffffff;
-}
-
-body.dark-mode .circle-btn:hover svg {
-    stroke: #10a37f;
-}
-    
-body.dark-mode .close-btn {
-    border-color: #555;
-}
-
-body.dark-mode .close-btn svg {
-    stroke: #ffffff;
-}
-
-body.dark-mode .close-btn:hover svg {
-    stroke: #10a37f;
-}
-
-df-messenger {
-    display: none !important;
+    font-weight: 700;
 }
 
 /* Code block styles */
@@ -418,57 +194,20 @@ df-messenger {
 }
 </style>
 </head>
-<body class="dark-mode">
-
-    <div class="floating-buttons">   
-        <div class="circle-btn" data-tooltip="Notifications">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 01-3.46 0"></path>
-            </svg>
-        </div>  
-        <div class="circle-btn" id="settingsToggleBtn" data-tooltip="Settings">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33h.09a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51h.09a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.09a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path>
-            </svg>
-        </div>
-    </div>
-
-    <div class="settings-panel" id="settingsPanel">
-        <button class="close-btn" id="settingsCloseBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        </button>
-        <h2>System Settings</h2>
-        <div class="setting-item">
-            <label class="toggle">
-                <input type="checkbox" id="darkModeToggle" checked>
-                <div class="slider"></div>
-                <span class="label-text">Dark Mode</span>
-            </label>
-        </div>
-    </div>
+<body>
     
     <div class="container">
-        <div class="header">
-            <h1>stonkAI</h1>
-            <p>Ecosystem Interface Node Engine</p>
-        </div>
-
         <div class="chat-area">
             <div class="messages" id="messagesContainer">
                 <div class="welcome-message" id="welcomeMessage">
-                    <h2>Welcome to Mintaby Engine Node</h2>
-                    <p>Type your query below to begin processing software code logic 100% locally.</p>
+                    <h2>Mintaby</h2>
+                    <p>Local AI Engine active. Type your query below to begin.</p>
                 </div>
             </div>
 
             <div class="input-area">
                 <div class="input-wrapper">
-                    <textarea id="messageInput" placeholder="Send a message..." rows="1"></textarea>
+                    <textarea id="messageInput" placeholder="Send a message to Mintaby..." rows="1"></textarea>
                     <button id="sendBtn" onclick="sendPromptRequest()">Send</button>
                 </div>
             </div>
@@ -480,20 +219,6 @@ df-messenger {
         const welcomeMessage = document.getElementById("welcomeMessage");
         const messageInput = document.getElementById("messageInput");
         const sendBtn = document.getElementById("sendBtn");
-        const settingsPanel = document.getElementById("settingsPanel");
-        const settingsToggleBtn = document.getElementById("settingsToggleBtn");
-        const settingsCloseBtn = document.getElementById("settingsCloseBtn");
-        const darkModeToggle = document.getElementById("darkModeToggle");
-
-        settingsToggleBtn.addEventListener("click", () => {
-            settingsToggleBtn.classList.add("twirl");
-            settingsPanel.classList.add("open");
-            setTimeout(() => settingsToggleBtn.classList.remove("twirl"), 450);
-        });
-        settingsCloseBtn.addEventListener("click", () => settingsPanel.classList.remove("open"));
-        darkModeToggle.addEventListener("change", (e) => {
-            document.body.classList.toggle("dark-mode", e.target.checked);
-        });
 
         messageInput.addEventListener("input", function() {
             this.style.height = "auto";
@@ -505,6 +230,10 @@ df-messenger {
                 e.preventDefault();
                 sendPromptRequest();
             }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            messageInput.focus();
         });
 
         function parseMarkdownToHtml(text) {
@@ -576,7 +305,7 @@ df-messenger {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
             try {
-                const response = await fetch("http://127.0.0.1:3000/api/chat", {
+                const response = await fetch("http://127.0.0", {
                     method: "POST",
                     mode: "cors",
                     headers: { "Content-Type": "application/json" },
