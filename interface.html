@@ -151,7 +151,6 @@ body {
     font-weight: 700;
 }
 
-/* Code block styles */
 .code-box {
     background: var(--code-bg);
     border-radius: 8px;
@@ -192,10 +191,49 @@ body {
     font-size: 13px;
     line-height: 1.5;
 }
+
+.loading-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hexagon-spinner {
+    width: 24px;
+    height: 24px;
+    animation: hexTwirl 2.5s linear infinite, hexPulse 1.8s ease-in-out infinite;
+}
+
+.hexagon-spinner polygon {
+    fill: none;
+    stroke: #10a37f;
+    stroke-width: 2;
+    stroke-dasharray: 12, 6;
+}
+
+.loading-text {
+    font-size: 14px;
+    color: #aaa;
+    animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes hexTwirl {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes hexPulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes textPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
 </style>
 </head>
 <body>
-    
     <div class="container">
         <div class="chat-area">
             <div class="messages" id="messagesContainer">
@@ -243,7 +281,8 @@ body {
             for (let i = 0; i < parts.length; i++) {
                 if (i % 2 === 1) {
                     const blockContent = parts[i];
-                    const firstLineBreak = blockContent.indexOf("\n");
+                    const firstLineBreak = blockContent.indexOf("
+");
                     let lang = "code";
                     let code = blockContent;
 
@@ -263,7 +302,8 @@ body {
                             <pre><code>${escapedCode}</code></pre>
                         </div>`;
                 } else {
-                    resultHtml += parts[i].replace(/\n/g, "<br>");
+                    resultHtml += parts[i].replace(/
+/g, "<br>");
                 }
             }
             return resultHtml;
@@ -286,7 +326,8 @@ body {
 
             const userDiv = document.createElement("div");
             userDiv.className = "message user";
-            userDiv.innerHTML = `<div class="message-content">${promptValue.replace(/\n/g, "<br>")}</div>`;
+            userDiv.innerHTML = `<div class="message-content">${promptValue.replace(/
+/g, "<br>")}</div>`;
             messagesContainer.appendChild(userDiv);
 
             messageInput.value = "";
@@ -299,13 +340,21 @@ body {
             assistantDiv.className = "message assistant";
             const assistantContent = document.createElement("div");
             assistantContent.className = "message-content";
-            assistantContent.innerText = "Thinking...";
+            
+            assistantContent.innerHTML = `
+                <div class="loading-wrapper">
+                    <svg class="hexagon-spinner" viewBox="0 0 24 24">
+                        <polygon points="12,2 22,7.5 22,18.5 12,24 2,18.5 2,7.5" />
+                    </svg>
+                    <span class="loading-text">Mintaby is writing...</span>
+                </div>`;
+                
             assistantDiv.appendChild(assistantContent);
             messagesContainer.appendChild(assistantDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
             try {
-                const response = await fetch("http://127.0.0", {
+                const response = await fetch("http://127.0.0.1:3000/api/chat", {
                     method: "POST",
                     mode: "cors",
                     headers: { "Content-Type": "application/json" },
@@ -316,21 +365,41 @@ body {
 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder("utf-8");
-                let completeResponseBuffer = "";
-                assistantContent.innerHTML = "";
+                
+                let incomingRawString = "";
+                let localRenderedString = "";
+                let isStreamingFinished = false;
+
+                const charactersPerTick = 6; 
+                const renderIntervalMs = 12;  
+
+                const typingClock = setInterval(() => {
+                    if (localRenderedString.length < incomingRawString.length) {
+                        localRenderedString += incomingRawString.substr(localRenderedString.length, charactersPerTick);
+                        assistantContent.innerHTML = parseMarkdownToHtml(localRenderedString);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    } else if (isStreamingFinished) {
+                        clearInterval(typingClock);
+                        messageInput.disabled = false;
+                        sendBtn.disabled = false;
+                        messageInput.focus();
+                    }
+                }, renderIntervalMs);
 
                 while (true) {
                     const { done, value } = await reader.read();
-                    if (done) break;
+                    if (done) {
+                        isStreamingFinished = true;
+                        break;
+                    }
 
-                    completeResponseBuffer += decoder.decode(value, { stream: true });
-                    assistantContent.innerHTML = parseMarkdownToHtml(completeResponseBuffer);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    const dataChunk = decoder.decode(value, { stream: true });
+                    incomingRawString += dataChunk;
                 }
+
             } catch (error) {
                 assistantContent.innerText = "Error: Cannot connect to the local Mintaby background server. Ensure 'node index.js' is currently active in your terminal.";
                 console.error(error);
-            } finally {
                 messageInput.disabled = false;
                 sendBtn.disabled = false;
                 messageInput.focus();
