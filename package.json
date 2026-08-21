@@ -1,0 +1,13 @@
+{
+  "name": "mintaby-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Local, zero-dependency AI engine for PHCode",
+  "main": "index.js",
+  "dependencies": {
+    "node-llama-cpp": "^3.0.0"
+  },
+  "allowScripts": {
+    "node-llama-cpp@3.20.0": true
+  }
+}
