@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mintaby Engine</title>
+    <title>stonkAI</title>
     <link rel="icon" type="png/jpeg" href="favicon.png">
 <style>
 * {
@@ -375,34 +375,29 @@ df-messenger {
     display: none !important;
 }
 
-/* --- Added Code Box and Formatting Styles --- */
+/* Code block styles */
 .code-box {
     background: var(--code-bg);
     border-radius: 8px;
-    margin: 10px 0;
+    margin: 12px 0;
     overflow: hidden;
     border: 1px solid var(--border);
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
 }
 .code-header {
-    background: rgba(0,0,0,0.2);
-    padding: 6px 12px;
+    background: rgba(0,0,0,0.15);
+    padding: 8px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
     color: #888;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.code-lang {
-    text-transform: uppercase;
-    font-weight: 600;
 }
 .copy-btn {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
     color: #aaa;
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 11px;
@@ -414,19 +409,17 @@ df-messenger {
     border-color: #10a37f;
 }
 .code-box pre {
-    padding: 12px;
+    padding: 14px;
     overflow-x: auto;
     margin: 0;
     color: var(--code-text);
-    font-size: 13.5px;
-    line-height: 1.4;
+    font-size: 13px;
+    line-height: 1.5;
 }
-    
 </style>
 </head>
-<body class="dark-mode"> <!-- Pre-loaded dark mode default to clean up template styling -->
+<body class="dark-mode">
 
-    <!-- Floating UI Controllers -->
     <div class="floating-buttons">   
         <div class="circle-btn" data-tooltip="Notifications">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -442,7 +435,6 @@ df-messenger {
         </div>
     </div>
 
-    <!-- Configuration Slideout Panel -->
     <div class="settings-panel" id="settingsPanel">
         <button class="close-btn" id="settingsCloseBtn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -455,3 +447,166 @@ df-messenger {
             <label class="toggle">
                 <input type="checkbox" id="darkModeToggle" checked>
                 <div class="slider"></div>
+                <span class="label-text">Dark Mode</span>
+            </label>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>stonkAI</h1>
+            <p>Ecosystem Interface Node Engine</p>
+        </div>
+
+        <div class="chat-area">
+            <div class="messages" id="messagesContainer">
+                <div class="welcome-message" id="welcomeMessage">
+                    <h2>Welcome to Mintaby Engine Node</h2>
+                    <p>Type your query below to begin processing software code logic 100% locally.</p>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea id="messageInput" placeholder="Send a message..." rows="1"></textarea>
+                    <button id="sendBtn" onclick="sendPromptRequest()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messagesContainer = document.getElementById("messagesContainer");
+        const welcomeMessage = document.getElementById("welcomeMessage");
+        const messageInput = document.getElementById("messageInput");
+        const sendBtn = document.getElementById("sendBtn");
+        const settingsPanel = document.getElementById("settingsPanel");
+        const settingsToggleBtn = document.getElementById("settingsToggleBtn");
+        const settingsCloseBtn = document.getElementById("settingsCloseBtn");
+        const darkModeToggle = document.getElementById("darkModeToggle");
+
+        settingsToggleBtn.addEventListener("click", () => {
+            settingsToggleBtn.classList.add("twirl");
+            settingsPanel.classList.add("open");
+            setTimeout(() => settingsToggleBtn.classList.remove("twirl"), 450);
+        });
+        settingsCloseBtn.addEventListener("click", () => settingsPanel.classList.remove("open"));
+        darkModeToggle.addEventListener("change", (e) => {
+            document.body.classList.toggle("dark-mode", e.target.checked);
+        });
+
+        messageInput.addEventListener("input", function() {
+            this.style.height = "auto";
+            this.style.height = (this.scrollHeight) + "px";
+        });
+
+        messageInput.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendPromptRequest();
+            }
+        });
+
+        function parseMarkdownToHtml(text) {
+            const parts = text.split(/```/g);
+            let resultHtml = "";
+
+            for (let i = 0; i < parts.length; i++) {
+                if (i % 2 === 1) {
+                    const blockContent = parts[i];
+                    const firstLineBreak = blockContent.indexOf("\n");
+                    let lang = "code";
+                    let code = blockContent;
+
+                    if (firstLineBreak !== -1) {
+                        const parsedLang = blockContent.substring(0, firstLineBreak).trim();
+                        if (parsedLang) lang = parsedLang;
+                        code = blockContent.substring(firstLineBreak + 1);
+                    }
+
+                    const escapedCode = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    resultHtml += `
+                        <div class="code-box">
+                            <div class="code-header">
+                                <span class="code-lang">${lang}</span>
+                                <button class="copy-btn" onclick="copyCodePayload(this)">Copy</button>
+                            </div>
+                            <pre><code>${escapedCode}</code></pre>
+                        </div>`;
+                } else {
+                    resultHtml += parts[i].replace(/\n/g, "<br>");
+                }
+            }
+            return resultHtml;
+        }
+
+        window.copyCodePayload = function(buttonElement) {
+            const preContainer = buttonElement.parentElement.nextElementSibling;
+            const codeString = preContainer.textContent;
+            navigator.clipboard.writeText(codeString).then(() => {
+                buttonElement.innerText = "Copied!";
+                setTimeout(() => { buttonElement.innerText = "Copy"; }, 2000);
+            });
+        };
+
+        async function sendPromptRequest() {
+            const promptValue = messageInput.value.trim();
+            if (!promptValue) return;
+
+            if (welcomeMessage) welcomeMessage.remove();
+
+            const userDiv = document.createElement("div");
+            userDiv.className = "message user";
+            userDiv.innerHTML = `<div class="message-content">${promptValue.replace(/\n/g, "<br>")}</div>`;
+            messagesContainer.appendChild(userDiv);
+
+            messageInput.value = "";
+            messageInput.style.height = "auto";
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            const assistantDiv = document.createElement("div");
+            assistantDiv.className = "message assistant";
+            const assistantContent = document.createElement("div");
+            assistantContent.className = "message-content";
+            assistantContent.innerText = "Thinking...";
+            assistantDiv.appendChild(assistantContent);
+            messagesContainer.appendChild(assistantDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            try {
+                const response = await fetch("http://127.0.0.1:3000/api/chat", {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: promptValue })
+                });
+
+                if (!response.ok) throw new Error("Connection failed");
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let completeResponseBuffer = "";
+                assistantContent.innerHTML = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    completeResponseBuffer += decoder.decode(value, { stream: true });
+                    assistantContent.innerHTML = parseMarkdownToHtml(completeResponseBuffer);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            } catch (error) {
+                assistantContent.innerText = "Error: Cannot connect to the local Mintaby background server. Ensure 'node index.js' is currently active in your terminal.";
+                console.error(error);
+            } finally {
+                messageInput.disabled = false;
+                sendBtn.disabled = false;
+                messageInput.focus();
+            }
+        }
+    </script>
+</body>
+</html>
