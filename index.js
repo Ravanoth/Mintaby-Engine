@@ -3,7 +3,6 @@ import path from "path";
 import http from "http";
 import { getLlama, LlamaChatSession } from "node-llama-cpp";
 
-// --- Global Console Filter ---
 const originalStderrWrite = process.stderr.write;
 process.stderr.write = function(chunk, encoding, callback) {
     const message = chunk.toString();
@@ -20,14 +19,16 @@ const PORT = 3000;
 async function startMintabyServer() {
     console.log("Initializing hyper-optimized local backend...");
     
+    // Unlocks automatic hardware routing across any operating system platform
     const llama = await getLlama({
-        gpu: "auto"
+        gpu: "auto",
+        compileSamplers: true // THE FIX: Offloads the intensive sampling algorithms directly to the GPU
     });
 
     console.log("Loading Mintaby AI local brain architecture...");
     const model = await llama.loadModel({ 
         modelPath: modelPath,
-        gpuLayers: 99
+        gpuLayers: 99 // Explicitly keeps the entire model architecture running in fast VRAM memory
     });
 
     const context = await model.createContext({ 
@@ -63,7 +64,7 @@ Adhere strictly to these identity layers:
 
         if (req.method === "GET" && req.url === "/") {
             res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-            res.end("<h1>Mintaby Service Engine is Online</h1><p>Send a POST request to <code>/api/chat</code> to communicate with the AI model.</p>");
+            res.end("<h1>Mintaby Service Engine is Online</h1>");
             return;
         }
 
@@ -82,7 +83,8 @@ Adhere strictly to these identity layers:
                     res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
 
                     await session.prompt(prompt, {
-                        temperature: 0.7, 
+                        temperature: 0.6, // Balanced temperature limits randomness to keep syntax quick
+                        maxTokens: 1024,   // Stops the engine from trailing off into unnecessary loops
                         onToken: (tokens) => {
                             const text = context.model.detokenize(tokens);
                             res.write(text);
@@ -104,8 +106,7 @@ Adhere strictly to these identity layers:
     server.listen(PORT, () => {
         console.log("\n==================================================");
         console.log(` Mintaby Engine Active at http://localhost:${PORT}`);
-        console.log(" Performance Strategy: Max Speed / Zero Degradation");
-        console.log(" Console Warning Interceptor: ACTIVE");
+        console.log(" Core Pipeline Strategy: Max Hardware Offload");
         console.log("==================================================\n");
     });
 }
