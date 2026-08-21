@@ -16,7 +16,7 @@ The engine functions as an API service, listening for prompts on local port 3000
 Before launching the engine, you must download the exact raw model file from the Hugging Face files directory and place it in your project folder.
 
 1. Model Directory Link: Go directly to the file list page on Hugging Face:
-https://huggingface.co
+https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF
 
 2. Locate File: Scroll through the file list on that page and find this exact file name:
 qwen2.5-coder-7b-instruct-q4_k_m.gguf
