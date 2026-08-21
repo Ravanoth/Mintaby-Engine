@@ -19,16 +19,15 @@ const PORT = 3000;
 async function startMintabyServer() {
     console.log("Initializing hyper-optimized local backend...");
     
-    // Unlocks automatic hardware routing across any operating system platform
     const llama = await getLlama({
         gpu: "auto",
-        compileSamplers: true // THE FIX: Offloads the intensive sampling algorithms directly to the GPU
+        compileSamplers: true 
     });
 
     console.log("Loading Mintaby AI local brain architecture...");
     const model = await llama.loadModel({ 
         modelPath: modelPath,
-        gpuLayers: 99 // Explicitly keeps the entire model architecture running in fast VRAM memory
+        gpuLayers: 99 
     });
 
     const context = await model.createContext({ 
@@ -52,7 +51,9 @@ Adhere strictly to these identity layers:
     });
 
     const server = http.createServer(async (req, res) => {
-        res.setHeader("Access-Control-Allow-Origin", "*");
+        // FIXED CORNER CASE: Intercepts the origin and reflects it back cleanly to allow local flat-file connections
+        const incomingOrigin = req.headers.origin || "*";
+        res.setHeader("Access-Control-Allow-Origin", incomingOrigin);
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -83,8 +84,8 @@ Adhere strictly to these identity layers:
                     res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
 
                     await session.prompt(prompt, {
-                        temperature: 0.6, // Balanced temperature limits randomness to keep syntax quick
-                        maxTokens: 1024,   // Stops the engine from trailing off into unnecessary loops
+                        temperature: 0.6, 
+                        maxTokens: 1024,   
                         onToken: (tokens) => {
                             const text = context.model.detokenize(tokens);
                             res.write(text);
@@ -107,6 +108,7 @@ Adhere strictly to these identity layers:
         console.log("\n==================================================");
         console.log(` Mintaby Engine Active at http://localhost:${PORT}`);
         console.log(" Core Pipeline Strategy: Max Hardware Offload");
+        console.log(" Cross-Origin Security Bypasser: ACTIVE");
         console.log("==================================================\n");
     });
 }
