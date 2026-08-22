@@ -18,37 +18,14 @@ const PORT = 3000;
 
 async function startMintabyServer() {
     console.log("Initializing hyper-optimized local backend...");
-    
-    const llama = await getLlama({
-        gpu: "auto",
-        compileSamplers: true 
-    });
-
+    const llama = await getLlama({ gpu: "auto", compileSamplers: true });
     console.log("Loading Mintaby AI local brain architecture...");
-    const model = await llama.loadModel({ 
-        modelPath: modelPath,
-        gpuLayers: 99 
-    });
+    const model = await llama.loadModel({ modelPath: modelPath, gpuLayers: 99 });
+    const context = await model.createContext({ contextSize: 2048, flashAttention: true, threads: 4 });
 
-    const context = await model.createContext({ 
-        contextSize: 2048,           
-        flashAttention: true,        
-        threads: 4
-    });
+    const systemPrompt = `Your name is Mintaby. You are an open-source, local AI assistant built directly into the Phred ecosystem. You specialize deeply in software engineering, logic, and multi-language code generation. You are friendly, conversational, and witty. Strictly do not use any emojis, emoticons, or visual decorative symbols under any circumstances. Always wrap code structures in standard markdown triple-backticks.`;
 
-    const systemPrompt = `Your name is Mintaby. You are an open-source, local AI assistant built directly into the Phred ecosystem. 
-You are a highly advanced software engineer, but you are also incredibly well-rounded, intellectual, and articulate in everyday conversation. 
-
-Adhere strictly to these identity layers:
-- Persona: Friendly, approachable, deeply conversational, and naturally witty. Talk like a brilliant, charismatic peer, not an analytical machine or text dump.
-- Versatility: While you specialize in coding, logic, and systems architecture, you are equally capable of creative writing, deep chatting, philosophizing, or standard conversation. Avoid turning everyday chats into rigid code breakdowns.
-- Rules: Strictly do not use any emojis, emoticons, or visual decorative symbols under any circumstances.
-- Formatting: Always wrap programmatic code structures in standard markdown triple-backticks with the language specified. Leave normal conversation as clean, rich prose.`;
-
-    const session = new LlamaChatSession({
-        contextSequence: context.getSequence(),
-        systemPrompt: systemPrompt
-    });
+    const session = new LlamaChatSession({ contextSequence: context.getSequence(), systemPrompt: systemPrompt });
 
     const server = http.createServer(async (req, res) => {
         const incomingOrigin = req.headers.origin || "*";
@@ -56,17 +33,8 @@ Adhere strictly to these identity layers:
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-        if (req.method === "OPTIONS") {
-            res.writeHead(200);
-            res.end();
-            return;
-        }
-
-        if (req.method === "GET" && req.url === "/") {
-            res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-            res.end("<h1>Mintaby Service Engine is Online</h1>");
-            return;
-        }
+        if (req.method === "OPTIONS") { res.writeHead(200); res.end(); return; }
+        if (req.method === "GET" && req.url === "/") { res.writeHead(200, { "Content-Type": "text/html" }); res.end("<h1>Online</h1>"); return; }
 
         if (req.method === "POST" && req.url === "/api/chat") {
             let body = "";
@@ -74,42 +42,20 @@ Adhere strictly to these identity layers:
             req.on("end", async () => {
                 try {
                     const { prompt } = JSON.parse(body);
-                    if (!prompt) {
-                        res.writeHead(400, { "Content-Type": "application/json" });
-                        res.end(JSON.stringify({ error: "Prompt is required" }));
-                        return;
-                    }
-
                     res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
-
                     await session.prompt(prompt, {
-                        temperature: 0.6, 
-                        maxTokens: 1024,   
-                        onToken: (tokens) => {
-                            const text = context.model.detokenize(tokens);
-                            res.write(text);
-                        }
+                        temperature: 0.6,
+                        maxTokens: 1024,
+                        onToken: (tokens) => { res.write(context.model.detokenize(tokens)); }
                     });
-
                     res.end();
-                } catch (err) {
-                    res.writeHead(500, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ error: "Internal engine processing failure" }));
-                }
+                } catch (err) { res.writeHead(500); res.end(); }
             });
-        } else {
-            res.writeHead(404, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ error: "Endpoint not found" }));
-        }
+        } else { res.writeHead(404); res.end(); }
     });
 
     server.listen(PORT, () => {
-        console.log("\n==================================================");
-        console.log(` Mintaby Engine Active at http://localhost:${PORT}`);
-        console.log(" Core Pipeline Strategy: Max Hardware Offload");
-        console.log(" Cross-Origin Security Bypasser: ACTIVE");
-        console.log("==================================================\n");
+        console.log(`\nMintaby Engine Active at http://localhost:\${PORT}\nCross-Origin Security Bypasser: ACTIVE\n`);
     });
 }
-
 startMintabyServer().catch(console.error);
