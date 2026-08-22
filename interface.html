@@ -4,233 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mintaby</title>
-    <link rel="icon" type="png/jpeg" href="favicon.png">
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --bg: #0d0d0d;
-    --text: #ffffff;
-    --panel-bg: #1a1a1a;
-    --bubble-user: #10a37f;
-    --bubble-assistant: #2a2a2a;
-    --border: #333333;
-    --code-bg: #141414;
-    --code-text: #f8f8f2;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-.chat-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.message {
-    display: flex;
-    gap: 12px;
-    animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.message.user {
-    justify-content: flex-end;
-}
-
-.message-content {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 12px;
-    line-height: 1.5;
-    font-size: 15px;
-}
-
-.message.assistant .message-content {
-    background: var(--bubble-assistant);
-    border: 1px solid var(--border);
-}
-
-.message.user .message-content {
-    background: var(--bubble-user);
-    color: #fff;
-}
-
-.input-area {
-    padding: 20px;
-    border-top: 1px solid var(--border);
-    background: var(--bg);
-}
-
-.input-wrapper {
-    display: flex;
-    gap: 12px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-#messageInput {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: inherit;
-    resize: none;
-    max-height: 100px;
-}
-
-#messageInput:focus {
-    outline: none;
-    border-color: #10a37f;
-    box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.1);
-}
-
-#sendBtn {
-    padding: 12px 24px;
-    background: #10a37f;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 600;
-    transition: background 0.2s;
-}
-
-#sendBtn:hover {
-    background: #0d8a6d;
-}
-
-#sendBtn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-.welcome-message {
-    text-align: center;
-    color: var(--text);
-    opacity: 0.7;
-    padding: 80px 20px 40px 20px;
-}
-
-.welcome-message h2 {
-    font-size: 28px;
-    margin-bottom: 12px;
-    color: var(--text);
-    font-weight: 700;
-}
-
-.code-box {
-    background: var(--code-bg);
-    border-radius: 8px;
-    margin: 12px 0;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
-}
-.code-header {
-    background: rgba(0,0,0,0.15);
-    padding: 8px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: #888;
-}
-.copy-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #aaa;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s;
-}
-.copy-btn:hover {
-    background: #10a37f;
-    color: #fff;
-    border-color: #10a37f;
-}
-.code-box pre {
-    padding: 14px;
-    overflow-x: auto;
-    margin: 0;
-    color: var(--code-text);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.loading-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.hexagon-spinner {
-    width: 24px;
-    height: 24px;
-    animation: hexTwirl 2.5s linear infinite, hexPulse 1.8s ease-in-out infinite;
-}
-
-.hexagon-spinner polygon {
-    fill: none;
-    stroke: #10a37f;
-    stroke-width: 2;
-    stroke-dasharray: 12, 6;
-}
-
-.loading-text {
-    font-size: 14px;
-    color: #aaa;
-    animation: textPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes hexTwirl {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes hexPulse {
-    0%, 100% { transform: scale(0.9); opacity: 0.6; }
-    50% { transform: scale(1.1); opacity: 1; }
-}
-
-@keyframes textPulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #0d0d0d; --text: #ffffff; --panel-bg: #1a1a1a; --bubble-user: #10a37f; --bubble-assistant: #2a2a2a; --border: #333333; --code-bg: #141414; --code-text: #f8f8f2; }
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); }
+.container { display: flex; flex-direction: column; height: 100vh; }
+.chat-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.message { display: flex; gap: 12px; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.message.user { justify-content: flex-end; }
+.message-content { max-width: 70%; padding: 12px 16px; border-radius: 12px; line-height: 1.5; font-size: 15px; }
+.message.assistant .message-content { background: var(--bubble-assistant); border: 1px solid var(--border); }
+.message.user .message-content { background: var(--bubble-user); color: #fff; }
+.input-area { padding: 20px; border-top: 1px solid var(--border); background: var(--bg); }
+.input-wrapper { display: flex; gap: 12px; max-width: 800px; margin: 0 auto; }
+#messageInput { flex: 1; padding: 12px 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 8px; font-size: 15px; font-family: inherit; resize: none; max-height: 100px; }
+#messageInput:focus { outline: none; border-color: #10a37f; }
+#sendBtn { padding: 12px 24px; background: #10a37f; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; }
+#sendBtn:disabled { background: #ccc; cursor: not-allowed; }
+.welcome-message { text-align: center; opacity: 0.7; padding: 80px 20px 40px 20px; }
+.welcome-message h2 { font-size: 28px; margin-bottom: 12px; font-weight: 700; }
+.code-box { background: var(--code-bg); border-radius: 8px; margin: 12px 0; overflow: hidden; border: 1px solid var(--border); font-family: monospace; }
+.code-header { background: rgba(0,0,0,0.15); padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #888; }
+.copy-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #aaa; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+.copy-btn:hover { background: #10a37f; color: #fff; }
+.code-box pre { padding: 14px; overflow-x: auto; margin: 0; color: var(--code-text); font-size: 13px; }
+.loading-wrapper { display: flex; align-items: center; gap: 12px; }
+.hexagon-spinner { width: 24px; height: 24px; animation: hexTwirl 2.5s linear infinite, hexPulse 1.8s ease-in-out infinite; }
+.hexagon-spinner polygon { fill: none; stroke: #10a37f; stroke-width: 2; stroke-dasharray: 12, 6; }
+.loading-text { font-size: 14px; color: #aaa; }
+@keyframes hexTwirl { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes hexPulse { 0%, 100% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.1); opacity: 1; } }
 </style>
 </head>
 <body>
@@ -242,7 +47,6 @@ body {
                     <p>Local AI Engine active. Type your query below to begin.</p>
                 </div>
             </div>
-
             <div class="input-area">
                 <div class="input-wrapper">
                     <textarea id="messageInput" placeholder="Send a message to Mintaby..." rows="1"></textarea>
@@ -251,157 +55,77 @@ body {
             </div>
         </div>
     </div>
-
     <script>
         const messagesContainer = document.getElementById("messagesContainer");
         const welcomeMessage = document.getElementById("welcomeMessage");
         const messageInput = document.getElementById("messageInput");
         const sendBtn = document.getElementById("sendBtn");
 
-        messageInput.addEventListener("input", function() {
-            this.style.height = "auto";
-            this.style.height = (this.scrollHeight) + "px";
-        });
-
+        messageInput.addEventListener("input", function() { this.style.height = "auto"; this.style.height = (this.scrollHeight) + "px"; });
         messageInput.addEventListener("keydown", function(e) {
-            if (e.key === "Enter" && !e.shiftKey) {
+            if (e.key === "Enter") {
                 e.preventDefault();
-                sendPromptRequest();
+                if (!e.shiftKey && !sendBtn.disabled) sendPromptRequest();
             }
-        });
-
-        document.addEventListener("DOMContentLoaded", () => {
-            messageInput.focus();
         });
 
         function parseMarkdownToHtml(text) {
             const parts = text.split(/```/g);
-            let resultHtml = "";
-
+            let html = "";
             for (let i = 0; i < parts.length; i++) {
                 if (i % 2 === 1) {
-                    const blockContent = parts[i];
-                    const firstLineBreak = blockContent.indexOf("
+                    const block = parts[i];
+                    const breakIdx = block.indexOf("
 ");
-                    let lang = "code";
-                    let code = blockContent;
-
-                    if (firstLineBreak !== -1) {
-                        const parsedLang = blockContent.substring(0, firstLineBreak).trim();
-                        if (parsedLang) lang = parsedLang;
-                        code = blockContent.substring(firstLineBreak + 1);
-                    }
-
-                    const escapedCode = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    resultHtml += `
-                        <div class="code-box">
-                            <div class="code-header">
-                                <span class="code-lang">${lang}</span>
-                                <button class="copy-btn" onclick="copyCodePayload(this)">Copy</button>
-                            </div>
-                            <pre><code>${escapedCode}</code></pre>
-                        </div>`;
-                } else {
-                    resultHtml += parts[i].replace(/\n/g, "<br>");
-                }
+                    let lang = "code", code = block;
+                    if (breakIdx !== -1) { lang = block.substring(0, breakIdx).trim() || "code"; code = block.substring(breakIdx + 1); }
+                    html += `<div class="code-box"><div class="code-header"><span>\${lang}</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code>\${code.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</code></pre></div>`;
+                } else { html += parts[i].replace(/\n/g, "<br>"); }
             }
-            return resultHtml;
+            return html;
         }
 
-        window.copyCodePayload = function(buttonElement) {
-            const preContainer = buttonElement.parentElement.nextElementSibling;
-            const codeString = preContainer.textContent;
-            navigator.clipboard.writeText(codeString).then(() => {
-                buttonElement.innerText = "Copied!";
-                setTimeout(() => { buttonElement.innerText = "Copy"; }, 2000);
+        window.copyCode = function(btn) {
+            navigator.clipboard.writeText(btn.parentElement.nextElementSibling.textContent).then(() => {
+                btn.innerText = "Copied!";
+                setTimeout(() => { btn.innerText = "Copy"; }, 2000);
             });
         };
 
         async function sendPromptRequest() {
-            const promptValue = messageInput.value.trim();
-            if (!promptValue) return;
-
+            const val = messageInput.value.trim();
+            if (!val || sendBtn.disabled) return;
             if (welcomeMessage) welcomeMessage.remove();
 
-            const userDiv = document.createElement("div");
-            userDiv.className = "message user";
-            userDiv.innerHTML = `<div class="message-content">${promptValue.replace(/\n/g, "<br>")}</div>`;
-            messagesContainer.appendChild(userDiv);
+            const uDiv = document.createElement("div"); uDiv.className = "message user"; uDiv.innerHTML = `<div class="message-content">\${val.replace(/\n/g, "<br>")}</div>`;
+            messagesContainer.appendChild(uDiv);
 
-            messageInput.value = "";
-            messageInput.style.height = "auto";
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
+            messageInput.value = ""; messageInput.style.height = "auto"; messageInput.disabled = true; sendBtn.disabled = true;
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            const assistantDiv = document.createElement("div");
-            assistantDiv.className = "message assistant";
-            const assistantContent = document.createElement("div");
-            assistantContent.className = "message-content";
-            
-            assistantContent.innerHTML = `
-                <div class="loading-wrapper">
-                    <svg class="hexagon-spinner" viewBox="0 0 24 24">
-                        <polygon points="12,2 22,7.5 22,18.5 12,24 2,18.5 2,7.5" />
-                    </svg>
-                    <span class="loading-text">Mintaby is writing...</span>
-                </div>`;
-                
-            assistantDiv.appendChild(assistantContent);
-            messagesContainer.appendChild(assistantDiv);
+            const aDiv = document.createElement("div"); aDiv.className = "message assistant";
+            const aContent = document.createElement("div"); aContent.className = "message-content";
+            aContent.innerHTML = `<div class="loading-wrapper"><svg class="hexagon-spinner" viewBox="0 0 24 24"><polygon points="12,2 22,7.5 22,18.5 12,24 2,18.5 2,7.5"/></svg><span class="loading-text">Mintaby is writing...</span></div>`;
+            aDiv.appendChild(aContent); messagesContainer.appendChild(aDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
             try {
-                const response = await fetch("http://127.0.0.1:3000/api/chat", {
-                    method: "POST",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt: promptValue })
-                });
+                const res = await fetch("http://127.0.0.1:3000/api/chat", { method: "POST", mode: "cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prompt: val }) });
+                if (!res.ok) throw new Error();
+                const reader = res.body.getReader(), dec = new TextDecoder("utf-8");
+                let raw = "", rend = "", finished = false;
+                aContent.innerHTML = "";
 
-                if (!response.ok) throw new Error("Connection failed");
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder("utf-8");
-                
-                let incomingRawString = "";
-                let localRenderedString = "";
-                let isStreamingFinished = false;
-
-                const charactersPerTick = 6; 
-                const renderIntervalMs = 12;  
-
-                const typingClock = setInterval(() => {
-                    if (localRenderedString.length < incomingRawString.length) {
-                        localRenderedString += incomingRawString.substr(localRenderedString.length, charactersPerTick);
-                        assistantContent.innerHTML = parseMarkdownToHtml(localRenderedString);
+                const clock = setInterval(() => {
+                    if (rend.length < raw.length) {
+                        rend += raw.substr(rend.length, 6);
+                        aContent.innerHTML = parseMarkdownToHtml(rend);
                         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    } else if (isStreamingFinished) {
-                        clearInterval(typingClock);
-                        messageInput.disabled = false;
-                        sendBtn.disabled = false;
-                        messageInput.focus();
-                    }
-                }, renderIntervalMs);
+                    } else if (finished) { clearInterval(clock); messageInput.disabled = false; sendBtn.disabled = false; messageInput.focus(); }
+                }, 12);
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) {
-                        isStreamingFinished = true;
-                        break;
-                    }
-
-                    const dataChunk = decoder.decode(value, { stream: true });
-                    incomingRawString += dataChunk;
-                }
-
-            } catch (error) {
-                assistantContent.innerText = "Error: Cannot connect to the local Mintaby background server. Ensure 'node index.js' is currently active in your terminal.";
-                console.error(error);
-                messageInput.disabled = false;
-                sendBtn.disabled = false;
-                messageInput.focus();
-            }
+                while (true) { const { done, value } = await reader.read(); if (done) { finished = true; break; } raw += dec.decode(value, { stream: true }); }
+            } catch { aContent.innerText = "Error connecting to local server."; messageInput.disabled = false; sendBtn.disabled = false; }
         }
     </script>
 </body>
