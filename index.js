@@ -51,7 +51,6 @@ Adhere strictly to these identity layers:
     });
 
     const server = http.createServer(async (req, res) => {
-        // FIXED CORNER CASE: Intercepts the origin and reflects it back cleanly to allow local flat-file connections
         const incomingOrigin = req.headers.origin || "*";
         res.setHeader("Access-Control-Allow-Origin", incomingOrigin);
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
