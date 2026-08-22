@@ -302,8 +302,7 @@ body {
                             <pre><code>${escapedCode}</code></pre>
                         </div>`;
                 } else {
-                    resultHtml += parts[i].replace(/
-/g, "<br>");
+                    resultHtml += parts[i].replace(/\n/g, "<br>");
                 }
             }
             return resultHtml;
@@ -326,8 +325,7 @@ body {
 
             const userDiv = document.createElement("div");
             userDiv.className = "message user";
-            userDiv.innerHTML = `<div class="message-content">${promptValue.replace(/
-/g, "<br>")}</div>`;
+            userDiv.innerHTML = `<div class="message-content">${promptValue.replace(/\n/g, "<br>")}</div>`;
             messagesContainer.appendChild(userDiv);
 
             messageInput.value = "";
